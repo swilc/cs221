@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<!-- saved from url=(0081)https://westadacs.codehs.me/cs221/projects/DoubleLinkedList/DoubleLinkedList.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body>
+<div style="font-family:&#39;Arial&#39;">
+
+<center>
+<h1 style="color:#FFFFFF;background-color:#045FB4">
+CS 221<br>
+Programming Assignment
+</h1>
+<h2>
+Double-linked List
+</h2>
+<p>
+<em>"The way to succeed is to double your error rate."</em><br>
+--Thomas J. Watson
+</p>
+</center>
+ 
+<h2 style="color:#FFFFFF;background-color:#045FB4">
+Objectives
+</h2>
+ 
+<p>
+</p><ul>
+  <li>Create a doubly linked list implementation of the <tt><big>IndexedUnsortedList</big></tt> interface</li>
+  <li>Create a fully functional iterator that implements the <tt><big>ListIterator</big></tt> interface</li>
+  <li>Use a test suite to ensure correct functionality of a class</li>
+</ul>
+<p></p>
+ 
+<h2 style="color:#FFFFFF;background-color:#045FB4">
+Tasks
+</h2>
+
+<p>
+For this programming assignment, you will:
+</p>
+
+<ul>
+  <li>Create a class called <tt><big>IUDoubleLinkedList</big></tt> that implements the <tt><big>IndexedUnsortedList</big></tt> interface.
+The underlying data structure of your class should use a node-based, doubly linked list. </li>
+<br>
+  <li>Implement a list iterator within your class that supports all <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ListIterator.html" target="blank"><tt><big>ListIterator</big></tt></a> methods, including the <tt><big>add()</big></tt>, <tt><big>remove()</big></tt>, and <tt><big>set()</big></tt> methods.</li>
+<br>
+  <li>Update your <tt><big>ListTester</big></tt> class:
+<br><br>
+    <ul>
+      <li>Implement list tests for all of the <tt><big>ListIterator</big></tt> methods. <a href="https://drive.google.com/file/d/1LfDbh7lI3Ziqv9aRSzgQJqIAu_FBEnLQ/view?usp=share_link" target="blank">Example tests</a> for empty and single-element lists are given to get you started.</li>
+<br>
+      <li>Implement <a href="https://drive.google.com/file/d/1lqa8OC3N4Q9Usd9z7KLQUmzUppzy4cRm/view?usp=share_link" target="blank">change scenarios</a> resulting from modifications to the list from <tt><big>ListIterator</big></tt>'s <tt><big>add()</big></tt>, <tt><big>remove()</big></tt>, and <tt><big>set()</big></tt> methods.</li>
+<br>
+      <li>Add <a href="https://drive.google.com/file/d/1opjCndoP6pAhJEsidjsahfeBHHaftdLE/view?usp=share_link" target="blank"><tt><big>ListIterator</big></tt> concurrency tests</a>. Replace the <tt><big>test_ListIteratorConcurrency()</big></tt> method with the given method.</li>
+<br>
+      <li>Modify your test class to run with the <tt><big>IUDoubleLinkedList</big></tt> class. You should comment out any mention of the <tt><big>GoodList</big></tt>, <tt><big>BadList</big></tt>, <tt><big>IUArrayList</big></tt>, and <tt><big>IUSingleLinkedList</big></tt> classes.</li>
+    </ul>
+  </li>	 
+<br>
+  <li>Report on your testing procedures and results in your README file using <a href="https://drive.google.com/file/d/11X68stqvOC48N1nPHXHKUpuEwWtXCiL3/view?usp=share_link" target="blank">this format</a>.</li>
+<br>
+  <li>Document all the classes and methods in your code with <a href="https://westadacs.codehs.me/cs221/jdoc.html" target="blank">Javadoc comments</a>. Include in-code comments as necessary.</li>
+</ul>
+
+<h2 style="color:#FFFFFF;background-color:#045FB4">
+Files
+</h2>
+
+<p>
+This project builds on the <tt><big>ListTester</big></tt> begun in previous assignments and uses the same <a href="https://drive.google.com/file/d/1FWlh0CpUZodoUEB-2p2REp96nPzhF73l/view?usp=share_link">IndexedUnsortedList.java</a>.
+</p>
+
+<h2 style="color:#FFFFFF;background-color:#045FB4">
+README
+</h2>
+
+<p>
+Your plain text README should follow the formatting and content guidelines <a href="https://drive.google.com/file/d/11X68stqvOC48N1nPHXHKUpuEwWtXCiL3/view?usp=share_link" target="blank">given here</a>, with special attention given to the following: 
+</p>
+
+<ul>
+  <li> Design: describe the roles of and relationships between the interface and classes that make up this program. You had choices about how to implement many methods; why did you choose what you chose?</li>
+<br>
+  <li> Testing: a detailed description of your testing procedure. You should describe how you tested your class and what bugs you found and fixed by so doing.</li>
+<br>
+  <li> Discussion: a discussion of your experience writing this assignment. This could be in the form of a journal.</li>
+</ul>
+
+<h2 style="color:#FFFFFF;background-color:#045FB4">
+Grading
+</h2>
+
+<p>
+Points will be awarded according to the following breakdown:
+</p>
+
+<table border="1" cellpadding="2" cellspacing="2">
+ <tbody><tr>
+  <td><strong>Tasks</strong></td>
+  <td><strong>Points</strong></td>
+ </tr>
+ <tr>
+  <td>Documentation - README, Javadocs, comments</td>
+  <td>20</td>
+ </tr>
+ <tr>
+  <td>ListTester - complete, including <tt><big>ListIterator</big></tt> functionality</td>
+  <td>20</td>
+ </tr>
+ <tr>
+  <td><tt><big>IUDoubleLinkedList</big></tt> and <tt><big>ListIterator</big></tt> Functionality</td>
+  <td>50</td>
+ </tr>
+ <tr>
+  <td>Quality - code formatting, naming conventions, encapsulation, etc.</td>
+  <td>10</td>
+ </tr>
+</tbody></table>
+
+<h2 style="color:#FFFFFF;background-color:#045FB4">
+Required Files
+</h2>
+
+<p>
+Please submit the following files:
+</p>
+
+<ul>
+  <li>IUDoubleLinkedList.java</li>
+  <li>Node.java (or whatever your node class is named)</li>
+  <li>ListTester.java (updated)</li>
+  <li>README.txt</li>
+  <li>Any other files required to compile / run your <tt><big>ListTester</big></tt> class using the <tt><big>IUDoubleLinkedList</big></tt> class. 
+</li></ul>
+
+<h2 style="color:#FFFFFF;background-color:#045FB4">
+Submission
+</h2>
+
+<p>
+Submit all of the required files. Do not include any unnecessary files. Do NOT submit anything zipped (your submission should just be a README and individual .java files).<br>
+Submit everything to the Double-linked List Project assignment in Microsoft Teams.
+</p>
+
+</div>
+
+</body></html>

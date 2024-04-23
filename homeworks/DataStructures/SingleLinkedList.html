@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<!-- saved from url=(0080)https://westadacs.codehs.me/cs221/homeworks/DataStructures/SingleLinkedList.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body>
+<div style="font-family:&#39;Arial&#39;">
+<center>
+<h1 style="color:#FFFFFF;background-color:#045FB4">
+CS 221
+</h1>
+
+<h2>
+Single-linked List
+</h2>
+ 
+<p>
+<em>"Strange how paranoia can link up with reality now and then."</em><br>
+--Philip K. Dick
+</p>
+</center>
+ 
+<h2 style="color:#FFFFFF;background-color:#045FB4">
+Objectives
+</h2>
+ 
+<ul>
+ <li>Create a singly-linked node implementation of the <tt><big>IndexedUnsortedList</big></tt> interface called <tt><big>IUSingleLinkedList</big></tt>.</li>
+ <li>Create a fully functional <tt><big>Iterator</big></tt> for your <tt><big>IUSingleLinkedList</big></tt>.</li>
+ <li>Expand your test suite to ensure correct functionality of your <tt><big>IUSingleLinkedList</big></tt> and <tt><big>Iterator</big></tt>.</li>
+</ul>
+ 
+<h2 style="color:#FFFFFF;background-color:#045FB4">
+Tasks
+</h2>
+
+<p>
+For this homework, you will:
+</p>
+
+<ol>	
+ <li>Implement a generic typed list class called <a href="https://drive.google.com/file/d/1k2ioHAgGCMMTG-XYc3Ux741uEOu4TqK1/view?usp=share_link" target="blank">IUSingleLinkedList</a>.
+  <ul>	
+   <li>Your <tt><big>IUSingleLinkedList</big></tt> class should use a chain of singly-linked nodes to manage list elements and implement all of the methods required by the <tt><big>IndexedUnsortedList</big></tt> interface.</li>
+   <li>You can use this <a href="https://drive.google.com/file/d/1EZG8nbovf-BPJmjXl1kozJLRvkV6p0zN/view?usp=share_link" target="blank"><tt><big>Node</big></tt></a> class in your implementation or create your own similar class.</li>
+  </ul>
+ </li>
+<br> 
+ <li>Complete your test plan. 
+  <ul>
+   <li>Implement the remaining change scenarios from your <a href="https://westadacs.codehs.me/cs221/homeworks/DataStructures/ListTest.html">test plan</a>. In total, you should have at least 21 scenarios from your original test plan in addition to the original given scenarios.</li>
+   <li>Be sure to uncomment the lines in the <tt><big>newList()</big></tt> method of <tt><big>ListTester</big></tt>, so the class can create <tt><big>IUSingleLinkedList</big></tt> objects.</li>
+   <li>Run tests frequently during development to be sure your list class is working properly.</li>
+  </ul>
+ </li>
+<br>
+ <li>Implement a fully functional <tt><big>Iterator</big></tt> for your <tt><big>IUSingleLinkedList</big></tt> class. 
+  <ul>	
+   <li>Your iterator should implement the Java <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html"><tt><big>Iterator</big></tt></a> interface.</li>
+   <li><tt><big>Iterator</big></tt> only requires you to implement two of its methods, <tt><big>hasNext()</big></tt> and <tt><big>next()</big></tt>, but you will also implement the optional <tt><big>remove()</big></tt> method.</li>
+   <li>The <tt><big>Iterator</big></tt> documentation says the result of calling its methods after a change has occurred to the list is undefined, because fail-fast behavior cannot be <em>guaranteed</em> for all <tt><big>Iterator</big></tt>s. <em>Your</em> implementation, however, will be expected to throw a <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ConcurrentModificationException.html">ConcurrentModificationException</a> if any <tt><big>Iterator</big></tt> method is called after the list has been modified by any source other than the current <tt><big>Iterator</big></tt>.</li>
+  </ul>
+ </li> 
+<br>
+ <li>Include change scenarios resulting from <tt><big>Iterator</big></tt>'s <tt><big>remove()</big></tt> method in your test suite.
+  <ul>
+   <li>See scenarios 44-49 in this <a href="https://drive.google.com/file/d/1osPB0nUnUXFF8qtfGamf9QQ2AzzGkcYB/view?usp=share_link">expanded set of change scenarios</a>.</li>
+  </ul>
+ </li>
+</ol>
+
+<h2 style="color:#FFFFFF;background-color:#045FB4">
+Files
+</h2>
+
+<p>
+You may use the following class to support creation of your <tt><big>IUSingleLinkedList</big></tt>: 
+</p>
+<ul> 
+<li><a href="https://drive.google.com/file/d/1EZG8nbovf-BPJmjXl1kozJLRvkV6p0zN/view?usp=share_link" target="blank">Node.java</a></li>
+</ul>
+
+<p>
+This <a href="https://drive.google.com/file/d/1k2ioHAgGCMMTG-XYc3Ux741uEOu4TqK1/view?usp=share_link" target="blank">IUSingleLinkedList.java</a> includes the basic class structure and a sample method.
+</p>
+
+<p>
+<tt><big>ListTester</big></tt> is the same test class you've been developing through previous assignments (<a href="https://westadacs.codehs.me/cs221/homeworks/DataStructures/ListTest.html">List Test Part 1</a>, <a href="https://westadacs.codehs.me/cs221/homeworks/DataStructures/ListTest2.html">List Test Part 2</a>, and <a href="https://westadacs.codehs.me/cs221/homeworks/DataStructures/ArrayList.html">ArrayList</a>) for testing implementations of <a href="https://drive.google.com/file/d/1r63txn_URYnRwwxiJpS3KEML4ZkqyR2Q/view?usp=share_link"><tt><big>IndexedUnsortedList</big></tt></a>
+</p>
+
+<h2 style="color:#FFFFFF;background-color:#045FB4">
+Grading
+</h2>
+
+<p>
+Points will be awarded according to the following breakdown:
+</p>
+
+<table border="1" cellpadding="2" cellspacing="2">
+ <tbody><tr>
+  <td><strong>Tasks</strong></td>
+  <td><strong>Points</strong></td>
+ </tr>
+ <tr>
+  <td><tt><big>ListTester</big></tt> testing all change scenarios from your test plan</td>
+  <td>20</td>
+ </tr>
+ <tr>
+  <td>IUSingleLinkedList class and <tt><big>Iterator</big></tt> functionality and quality</td>
+  <td>20</td>
+ </tr>
+</tbody></table>
+
+<h2 style="color:#FFFFFF;background-color:#045FB4">
+Required Files
+</h2>
+
+<p>
+Submit the following files:
+</p>
+
+<ul>
+<li><tt><big>IUSingleLinkedList.java</big></tt></li>
+<li><tt><big>Node.java</big></tt> (or whatever your node class is named)</li>
+<li><tt><big>ListTester.java</big></tt> with all tests from your test plan, plus <tt><big>Iterator</big></tt> tests</li>
+<li><em>Any other source files necessary to compile and run your project</em></li>
+</ul>
+
+<h2 style="color:#FFFFFF;background-color:#045FB4">
+Submission
+</h2>
+
+<p>
+Submit all of the required files. Do not include any unnecessary files. Do NOT submit anything zipped (your submission should just be individual .java files).<br>
+Submit everything to the Single-linked List assignment in Microsoft Teams.
+</p>
+
+</div>
+
+</body></html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<!-- saved from url=(0072)https://westadacs.codehs.me/cs221/homeworks/SearchAndSort/Mergesort.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body>
+<div style="font-family:&#39;Arial&#39;">
+<center>
+<h1 style="color:#FFFFFF;background-color:#045FB4">
+CS 221
+</h1>
+  
+<h2>
+Recursive Mergesort
+</h2>
+  
+<p>
+<em>"Simplicity is the ultimate sophistication."</em><br>
+--Leonardo da Vinci
+</p>
+</center>
+ 
+<h2 style="color:#FFFFFF;background-color:#045FB4">
+Objectives
+</h2>
+  
+<p>
+</p><ul>
+  <li>Implement a recursive Mergesort algorithm in Java.</li>
+</ul>
+<p></p>
+   
+<h2 style="color:#FFFFFF;background-color:#045FB4">
+Tasks
+</h2>
+
+<p>
+Complete the <tt><big>Sort</big></tt> static utility class, using a recursive implementation of the Mergesort sorting algorithm.
+</p>
+
+<ol>
+  <li>Complete the <tt><big>Sort</big></tt> class without modifying the public <tt><big>sort</big></tt> methods or the method signatures of the private <tt><big>mergesort</big></tt> methods. No new public methods should be added to the <tt><big>Sort</big></tt> class.
+<br><br>
+    <ul>
+      <li>One version of the algorithm requires that elements in the given list be of a class type that implements the <tt><big>Comparable</big></tt> interface. Comparisons between elements are made with the objects' own <tt><big>compareTo</big></tt> method.
+Your <tt><big>Sort</big></tt> class will be tested with lists containing <tt><big>Integer</big></tt> objects, which implement <tt><big>Comparable</big></tt>.</li>
+<br>
+      <li>The other version of the algorithm requires a <tt><big>Comparator</big></tt> object along with the list, to compare elements using the <tt><big>Comparator</big></tt>'s <tt><big>compare</big></tt> method. The given test class defines a <tt><big>Comparator</big></tt> internally that it uses to compare <tt><big>Integer</big></tt>s.</li>
+<br>
+      <li>Your implementation must work with an instance of the provided <tt><big>WrappedDLL</big></tt> class, or for extra credit, an instance of your <tt><big>IUDoubleLinkedList</big></tt> class.
+<br><br>
+        <ul>
+          <li>Your <tt><big>mergesort</big></tt> implementations should run in O(n log(n)) time. Do not write or call code that would make them worse than that. Therefore, you should avoid all indexed list methods, including the indexed <tt><big>ListIterator</big></tt> constructor.</li>
+<br>
+          <li>For extra credit, you can replace all references to <tt><big>WrappedDLL</big></tt> with your <tt><big>IUDoubleLinkedList</big></tt> class. Again, do not write or call code that would make your algorithm run in worse than O(n log(n)) time. If you have list methods that are O(n) when they should be O(1), for example, it will negatively impact the performance of sorting.</li>
+        </ul>
+      </li>
+    </ul> 
+  </li>
+<br>
+  <li>Use the provided <tt><big>SortTester</big></tt> class to test your implementation. If you wish, you may add additional tests, but the given tests will be expected to pass as written.</li>
+</ol>
+
+<h2 style="color:#FFFFFF;background-color:#045FB4">
+Mergesort Algorithm
+</h2>
+
+<p>
+</p><ol>
+  <li>If the list has more than one element, divide elements into equal-sized left and right lists.</li>
+<br>
+  <li>Recursively mergesort both halves.</li>
+<br>
+  <li>Compare the first element of each sorted half and add the smaller of the two elements to the end of the original list. Continue until all elements have been returned to the original list.</li>
+</ol>
+<p></p>
+
+<h2 style="color:#FFFFFF;background-color:#045FB4">
+Files
+</h2>
+
+<p>
+You will need the following files: 
+</p>
+
+<ul>   
+<li><a href="https://drive.google.com/file/d/1soEYJ1Yj29sU0dfesjZgkJlnwolwrWLu/view?usp=share_link">Sort.java</a></li>
+<li><a href="https://drive.google.com/file/d/1y77emShawBjPow8AC9ukmL5SvIQegm2C/view?usp=share_link">WrappedDLL.java</a></li>
+<li><a href="https://drive.google.com/file/d/1NHIXjB_L_8hJiMQA0uodfJ01Aee2RvG4/view?usp=share_link">IndexedUnsortedList.java</a></li>
+<li><a href="https://drive.google.com/file/d/1MUIYvO6xbMzdy_y_qKiksuVAxt6UaKjg/view?usp=share_link">SortTester.java</a></li>
+</ul>
+
+<p>
+All of these files can be found in this <a href="https://drive.google.com/file/d/1ffn_PdIi14j1BNNwBCoQnhbJxD1gSUaQ/view?usp=share_link">zip file</a>.
+</p>
+
+<h2 style="color:#FFFFFF;background-color:#045FB4">
+Extra Credit 
+</h2>
+
+<p>
+For extra credit, do all of the following:
+</p>
+   
+<ul>
+  <li>Include your fully functional <tt><big>IUDoubleLinkedList</big></tt> and any necessary supporting files in your submission</li>
+  <li>Update <tt><big>SortTester</big></tt> to use <tt><big>IUDoubleLinkedList</big></tt> wherever <tt><big>WrappedDLL</big></tt> was being used</li>
+  <li>Update the <tt><big>newList()</big></tt> method in <tt><big>Sort</big></tt> to return a new <tt><big>IUDoubleLinkedList</big></tt> rather than a <tt><big>WrappedDLL</big></tt></li>
+</ul> 
+
+<h2 style="color:#FFFFFF;background-color:#045FB4">
+Grading
+</h2>
+
+<p>
+Points will be awarded according to the following breakdown:
+</p>
+
+<table width="70%" border="1" cellpadding="2" cellspacing="2">
+  <tbody><tr valign="top">
+    <td><strong>Tasks</strong></td>
+    <td width="61"><strong>Points</strong></td>
+  </tr>
+  <tr valign="top">
+    <td>Required functionality - sorts correctly</td>
+    <td width="61">20</td>
+  </tr>
+  <tr valign="top">
+    <td>Design - uses recursion correctly</td>
+    <td width="61">10</td>
+  </tr>
+  <tr valign="top">
+    <td>Extra Credit: Works with (and internally uses) your <tt><big>IUDoubleLinkedList</big></tt></td>
+    <td width="61">5</td>
+  </tr>
+</tbody></table>
+
+<h2 style="color:#FFFFFF;background-color:#045FB4">
+Required Files
+</h2>
+
+<p>
+You should submit your copies of the following files:
+</p>
+
+<ul>
+  <li>Sort.java (updated)</li>
+  <li>SortTester.java</li>
+  <li>IUDoubleLinkedList.java (if attempting extra credit) or WrappedDLL.java (if not attempting extra credit)</li>
+  <li>IndexedUnsortedList.java <em>and any other files required to compile and run your program</em></li>
+</ul>
+
+<h2 style="color:#FFFFFF;background-color:#045FB4">
+Submission
+</h2>
+
+<p>
+Submit all of the required files. Do not include any unnecessary files. Do NOT submit anything zipped (your submission should just be individual .java files).<br>
+Submit everything to the Mergesort assignment in Microsoft Teams.
+</p>
+
+<br><br>
+
+</div>
+
+</body></html>

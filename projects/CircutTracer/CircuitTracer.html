@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<!-- saved from url=(0075)https://westadacs.codehs.me/cs221/projects/CircuitTracer/CircuitTracer.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body>
+<div style="font-family:&#39;Arial&#39;">
+
+<center>
+<h1 style="color:#FFFFFF;background-color:#045FB4">
+CS 221<br>
+Programming Assignment
+</h1>
+<h2>
+Circuit Tracer
+</h2>
+<p>
+<i>"If you find a path with no obstacles, it probably doesn't lead anywhere."</i><br>
+--Frank A. Clark
+</p>
+</center>
+ 
+<h2 style="color:#FFFFFF;background-color:#045FB4">
+Objectives
+</h2>
+
+<p>
+</p><ul>
+<li>Implement a brute-force search algorithm.</li>
+<li>Use command-line arguments.</li>
+<li>Manage <tt><big>Exception</big></tt>s while parsing an input file.</li>
+<li>Analyze the impact of storage data structure choice on the search algorithm.</li>
+<li>Create a graphical user interface (optional).</li>
+</ul>
+<p></p>
+ 
+<h2 style="color:#FFFFFF;background-color:#045FB4">
+Background
+</h2>
+
+<p>
+You are an intern at a small, custom circuit-board design firm that is still firmly rooted in the paper-and-pencil world--all layouts are done by hand.
+Your boss finally buckled under the pressure of progress and bought an actual computer to enable some layout automation, but he has sworn that's all the money 
+he's willing to spend on this newfangled technamology. 
+<br>
+<br>
+That's where you come in.
+Despite there being commercial software for this purpose, the boss thinks it will be cheaper to have you, the unpaid intern, 
+write a program to find the shortest path for connecting a pair of components on a crowded circuit board.
+<br>
+<br>
+Head engineer, Jim-Roy Huffnanny, has already come up with an <a href="https://drive.google.com/file/d/1MuLkluT6tPcBsxNC05P9i0Bpp8wrrBBm/view?usp=share_link">input file format</a> to represent the layout of a circuit board.
+You'll need to be able to read in circuit layouts in this format and output your results in a similar <a href="https://drive.google.com/file/d/1LadRqSeXc1C5Djvy2svy8yo0ClJGOZdW/view?usp=share_link">output format</a>:
+</p>
+	
+<ul>
+<li>
+First line of an input file gives two integer values for the number of rows and columns on the board.
+</li>
+<br>
+<li>
+Each remaining line represents one row of the board. Various characters represent components, occupied spaces, and open spaces as follows:
+</li>
+</ul>
+
+<dl style="text-align:left;font-size: 14pt;font-family:&#39;Courier&#39;;font-weight: bold;font-style:normal;text-decoration: none;">
+<dd>'O' - open space (that's capital letter O, not zero)</dd>
+<dd>'X' - an occupied position (a component or existing trace the new trace cannot cross)</dd>
+<dd>'1' - first of two components that need to be connected</dd>
+<dd>'2' - second of two components that need to be connected</dd>
+<dd>'T' - a position in the new trace connecting the two components</dd>
+</dl>
+
+<p>
+A recent board that's giving Jim-Roy fits looks like this:
+</p>
+
+<dl style="text-align:left;font-size: 14pt;font-family:&#39;Courier&#39;;font-weight: bold;font-style:normal;text-decoration: none;">
+<dd>5 6</dd>
+<dd>X O 1 O O O</dd>
+<dd>X X X O O O</dd>
+<dd>O O O O X O</dd>
+<dd>O 2 O O X O</dd>
+<dd>O X O O O O</dd>
+</dl>
+
+<p>
+The goal is to find a shortest path that connects the two components identified by digit characters.
+Diagonal traces are not allowed on account of issues with the manufacturing division--the division head, an old guy named Pak Mon, believes diagonal motion is unnatural.
+<br>
+<br>
+Looking at the sample file, you quickly identified three equally satisfactory solutions for this board, each with a path length of 5:
+</p>
+
+<dl style="text-align:left;font-size: 14pt;font-family:&#39;Courier&#39;;font-weight: bold;font-style:normal;text-decoration: none;">
+<dd>X O 1 T O O</dd>
+<dd>X X X T O O</dd>
+<dd>O T T T X O</dd>
+<dd>O 2 O O X O</dd>
+<dd>O X O O O O</dd>
+</dl>
+
+<dl style="text-align:left;font-size: 14pt;font-family:&#39;Courier&#39;;font-weight: bold;font-style:normal;text-decoration: none;">
+<dd>X O 1 T O O</dd>
+<dd>X X X T O O</dd>
+<dd>O O T T X O</dd>
+<dd>O 2 T O X O</dd>
+<dd>O X O O O O</dd>
+</dl>
+
+<dl style="text-align:left;font-size: 14pt;font-family:&#39;Courier&#39;;font-weight: bold;font-style:normal;text-decoration: none;">
+<dd>X O 1 T O O</dd>
+<dd>X X X T O O</dd>
+<dd>O O O T X O</dd>
+<dd>O 2 T T X O</dd>
+<dd>O X O O O O</dd>
+</dl>
+
+<p>
+There are also many unsatisfactory solutions, such as Jim-Roy's latest effort:
+</p>
+
+<dl style="text-align:left;font-size: 14pt;font-family:&#39;Courier&#39;;font-weight: bold;font-style:normal;text-decoration: none;">
+<dd>X O 1 T T T</dd>
+<dd>X X X O O T</dd>
+<dd>O T T T X T</dd>
+<dd>O 2 O T X T</dd>
+<dd>O X O T T T</dd>
+</dl>
+
+<p>
+You recall a general-purpose, brute-force search algorithm from back in your CS 221 days that should work for this application, 
+but you're not certain whether a stack or a queue will be the best underlying data storage. You decide to wrap both 
+in a class called <tt><big>Storage</big></tt> and choose which one to use at runtime.
+<br>
+<br>
+Here is the pseudo-code for the search algorithm:
+</p>
+
+<pre>  initialize an empty <i>Storage</i> object called stateStore that stores objects of type <i>TraceState</i>
+
+  initialize an empty <i>List</i> called bestPaths that stores objects of type <i>TraceState</i>
+
+  add a new initial <i>TraceState</i> object (a path with one trace) to stateStore for each open position adjacent to the starting component
+
+  while (!stateStore.isEmpty)
+
+    retrieve the next <i>TraceState</i> object from stateStore
+
+    if that <i>TraceState</i> object is a solution (ends with a position adjacent to the ending component),
+
+      if bestPaths is empty or the <i>TraceState</i> object's path is equal in length to one of the <i>TraceState</i>s in <i>bestPaths</i>,
+
+        add it to <i>bestPaths</i>
+
+      else if that <i>TraceState</i> object's path is shorter than the paths in <i>bestPaths</i>,
+
+        clear <i>bestPaths</i> and add the current <i>TraceState</i> as the new shortest path
+
+    else generate all valid next <i>TraceState</i> objects from the current <i>TraceState</i> and add them to stateStore
+</pre>
+ 
+<p>
+Note: 
+</p>
+<ul>
+<li>Initial <tt><big>TraceState</big></tt>s are constructed with a single starting point. Subsequent <tt><big>TraceState</big></tt>s build on an existing <tt><big>TraceState</big></tt> by adding one new position adjacent to the old path's last position.</li> 
+<li>You can't extend the path into a position that isn't open or that is already part of the path.</li>
+</ul>
+
+<p> 
+This algorithm will search for all possible paths (search states) from the starting component to the ending component, 
+but the choice of underlying data structure for <tt><big>Storage</big></tt> will affect the order in which paths are evaluated in the <tt><big>while</big></tt> loop 
+and the number of states in <tt><big>stateStore</big></tt> during the search.
+</p>
+
+<h2 style="color:#FFFFFF;background-color:#045FB4">
+Tasks
+</h2>
+
+<p>
+</p><ol>
+  <li><big><strong>Before</strong></big> you starting coding your project:
+<br>
+<br>
+    <ol type="a">
+      <li>Use this simple layout to work <em>completely</em> through the search algorithm by hand twice -- once with stack storage, and once with queue storage
+        <pre>1 O O O
+O O O 2
+        </pre>
+      </li>
+      <li>Create a section in your README file called <i>Analysis</i> and thoroughly address the following questions:
+<br>
+<br>
+        <ul>
+          <li>How does the choice of <tt><big>Storage</big></tt> configuration (stack vs queue) affect the sequence in which paths are explored in the search algorithm? (This requires more than a "stacks are LIFOs and queues are FIFOs" answer.) </li>
+          <li>Is the total number of search states (possible paths) affected by the choice of stack or queue?</li>
+          <li>Is using one of the storage structures likely to find a solution in fewer steps than the other? Always?</li>
+          <li>Does using either of the storage structures guarantee that the first solution found will be a shortest path?</li>
+          <li>How is memory use (the maximum number of states in <tt><big>Storage</big></tt> at one time) affected by the choice of underlying structure?</li>
+          <li>What is the Big-Oh runtime order for the search algorithm? Does it reflect the maximum size of <tt><big>Storage</big></tt>? Does it reflect the number of board posisions? Does it reflect the number of paths explored? Does it reflect the maximum path length? Is it something else? What is 'n'? What is the primary input factor that increases the difficulty of the task?</li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+<br>
+  <li>To code your project: 
+<br>
+<br>
+    <ol>
+      <li>Complete the <tt><big>CircuitBoard</big></tt> constructor.
+<br>
+<br>
+        <ul>
+          <li>The constructor should parse the input file and populate the <tt><big>char[][] board</big></tt> class variable.</li>
+          <li>Any formatting problems with the input file should cause an <tt><big>InvalidFileFormatException</big></tt> to be thrown from the constructor, with an appropriate message about the cause of the exception.</li>
+        </ul>
+      </li>
+<br>
+      <li>Complete the <tt><big>CircuitTracer</big></tt> class. 
+<br>
+<br>
+        <ol>
+          <li>The class should:
+            <ul>
+              <li>validate the command-line arguments</li>
+              <li>construct a <tt><big>CircuitBoard</big></tt> from the input file</li>
+              <li>search for all optimal trace paths using the user's storage choice</li>
+              <li>report the results according to the user's display choice</li>
+            </ul>
+          </li>
+<br>
+          <li>The program requires three command-line arguments:
+<br>
+<br>
+            <ol>
+              <li>First argument:
+                <dl>
+                  <dd><tt><big>-s</big></tt> &nbsp; -- use a stack for storage</dd>
+                  <dd><tt><big>-q</big></tt> &nbsp; -- use a queue for storage</dd>
+                </dl>
+              </li>
+              <li>Second argument: 
+                <dl>
+                  <dd><tt><big>-c</big></tt> &nbsp; -- run program in console mode</dd>
+                  <dd><tt><big>-g</big></tt> &nbsp; -- run program in GUI mode (extra-credit--see below for details). If GUI mode is not supported, let the user know and exit the program.</dd>
+                </dl>
+              </li>
+              <li>Third argument: name of the input file</li>
+            </ol>
+          </li>
+<br>
+          <li>Use conditional checks and exception handling to appropriately deal with input errors from the command line and the input file. 
+These <a href="https://drive.google.com/drive/folders/1msurocsMoDR9II6y8PKt2WWKMet4bnL4?usp=share_link" target="blank">example input files</a> include a variety of valid and invalid input files to use for testing.
+<br>
+<br>
+            <ul>
+              <li>Give a clear <a href="https://en.wikipedia.org/wiki/Usage_message" target="_blank">usage message</a> in response to  invalid command line arguments and exit cleanly.</li>
+              <li>Report <tt><big>InvalidFileFormatException</big></tt>s for any issues encountered while parsing the input file, then exit cleanly. Do not display full stack traces - only the <tt><big>InvalidFileFormatException</big></tt>'s name and descriptive message as obtained from its toString() method.</li>
+              <li>No unhandled exceptions should crash the program and no stack traces should be printed to the console while the program is running.</li>
+          
+        </ul></li></ol>
+      </li>
+    </ol>
+  </li>
+</ol>
+<p></p>
+
+<h2 style="color:#FFFFFF;background-color:#045FB4">
+Files
+</h2>
+
+<p>
+<big><strong>Do not start programming</strong></big> until you have first done the algorithm walkthrough by hand and documented your observations as described above.
+</p>
+<p>
+In order to complete this project, you will need the following files:
+</p>
+
+<p>
+</p><ul>
+  <li><tt><big><a href="https://drive.google.com/file/d/1TuIn1eeQznRURdDrZsFMI3G3ZpRdP060/view?usp=share_link">Storage.java</a></big></tt> - a completed class that can be implemented using either a stack or a queue. 
+    <ul>
+      <li>Contains an enumeration defining the available underlying data structures that the user can choose from when a <tt><big>Storage</big></tt> object is instantiated.</li>
+    </ul>
+  </li>
+<br>
+  <li><tt><big><a href="https://drive.google.com/file/d/1VXKHTPOIZSWpoSQt9KtGY6eOkycf_h6i/view?usp=share_link">CircuitBoard.java</a></big></tt> - a partially-completed class that represents a circuit board.
+    <ul>
+      <li>Contents of circuit board can loaded from file or are part of a search state.</li>
+      <li>Complete code to read the input file to construct a new board.</li>
+    </ul> 		
+  </li>
+<br>
+  <li><tt><big><a href="https://drive.google.com/file/d/1xlrkn-zSZkBQbf4ZRSL8qZCNZwnMrH9C/view?usp=share_link">TraceState.java</a></big></tt> - a completed class that represents a search state with the trace path.</li>
+<br>
+  <li><tt><big><a href="https://drive.google.com/file/d/1CVuqqTucV4QBkX-jNxGCI6c9E7-PQsCr/view?usp=share_link">InvalidFileFormatException.java</a></big></tt>, and <tt><big><a href="http://cs.boisestate.edu/~cs221/projects/CircuitTracer/files/OccupiedPositionException.java">OccupiedPositionException.java</a></big></tt> - exceptions used by other classes in this project</li>
+<br>
+  <li><tt><big><a href="https://drive.google.com/file/d/1U5lbmb6nNgo3Y9pKaYFGxnoO4Na5nv4Q/view?usp=share_link">CircuitTracer.java</a></big></tt> - a partially-completed driver class. 
+<br>
+    You will need to complete code to:
+    <ul>
+      <li> parse and validate command line options</li>
+      <li> configure <tt><big>Storage stateStore</big></tt> for the search</li>
+      <li> run search for the best paths</li>
+      <li> report results from the search</li>
+    </ul>
+  </li>
+<br>
+  <li>Test files:
+    <ul>
+      <li><a href="https://drive.google.com/file/d/13fEMwkJCQEdL0WRJRbyrsDJFUScEiEcv/view?usp=share_link">CircuitTracerTester.java</a> - a test class for the <tt><big>CircuitTracer</big></tt> and <tt><big>CircuitBoard</big></tt> classes. (<a href="http://cs.boisestate.edu/~cs221/projects/CircuitTracer/files/sample_test_output.txt" target="_blank">sample test output</a> when all is working)<br>
+NOTE: Eclipse will only run <tt><big>CircuitTracer</big></tt> from the tester if you have configured your project to "Use project folder as root for source and data files" as you were instructed to do back in <a href="https://docs.google.com/document/d/1Dk9Bkoe3-K8X3J-s5g36TYnbJqkhryEay8XXJqFlUKc/edit#heading=h.11pi87omqg1a" target="blank">Lesson 02 of CS 121</a>. If your project is divided between src/ and bin/ directories, it won't work.<br>
+ALSO NOTE: a "pass" is contingent on whether your output actually meets requirements. All output will be reviewed when your project is graded.<br>
+ALSO ALSO NOTE: This is not the only way you can test <tt><big>CircuitTracer</big></tt>! You can and should also run <tt><big>CircuitTracer</big></tt> directly to test and debug using specific command line args and specific input files.</li>
+      <li><a href="https://drive.google.com/drive/folders/1msurocsMoDR9II6y8PKt2WWKMet4bnL4?usp=share_link">Additional input files</a> for testing, including both valid and invalid boards. 
+    </li></ul>
+  </li>
+</ul>
+<p></p>
+
+<p>
+Here is a <a href="https://drive.google.com/file/d/1A4jMGhTqbj8TNvAYbmmx5NxvmwuOAn-e/view?usp=share_link">zip file</a> with all of these files (to use this, right-click the link, select "Copy Link Address", and paste it in a new tab). 
+</p>
+
+<h2 style="color:#FFFFFF;background-color:#045FB4">
+Extra Credit
+</h2>
+
+<p>
+In GUI mode, the program should initially display the original board layout as a grid of labels and a selectable list of all shortest path solutions. 
+If the user selects a path from the list, the positions on the board that formed the path should be somehow highlighted in the grid.
+For an example, refer to these <a href="https://drive.google.com/drive/folders/16LlH0hPbj4CUOTN6vy0pCgWNlevDsObh?usp=share_link">screenshots</a>.
+</p>
+
+<h2 style="color:#FFFFFF;background-color:#045FB4">
+Sample Run
+</h2>
+
+<p>
+To specify the stack implementation in your <tt><big>Storage</big></tt> class with console output and an input file called <i>grid.dat</i>, 
+you should use the following command-line statement to run your program:
+</p>
+
+<p>
+</p><pre>  java CircuitTracer -s -c grid.dat
+</pre>
+<p></p>
+
+<p>
+Your program should then print the solutions to the console in the <a href="https://drive.google.com/file/d/1LadRqSeXc1C5Djvy2svy8yo0ClJGOZdW/view?usp=share_link">required output format</a>.
+</p>
+
+<p>
+To specify the queue implementation in your <tt><big>Storage</big></tt> class with GUI output and an input file called <i>grid2.dat</i>, 
+you should use the following command-line statement to run your program: 
+</p>
+
+<p>
+</p><pre>  java CircuitTracer -q -g grid2.dat
+</pre>
+<p></p>
+
+<p>
+Your program should then open a GUI window to display solutions, or print an appropriate usage message to the console if a GUI is unavailable.
+</p>
+
+<h2 style="color:#FFFFFF;background-color:#045FB4">
+README
+</h2>
+
+<p>
+Your plain text README should follow the formatting and content guidelines <a href="https://drive.google.com/file/d/11X68stqvOC48N1nPHXHKUpuEwWtXCiL3/view?usp=share_link" target="blank">given here</a>, with special attention given to the following: 
+</p>
+
+<ul>
+  <li> Analysis: address all of the questions in the <i>Tasks</i> section.</li><br>
+  <li> Design: the design and major concepts of this program.</li><br>
+  <li> Testing: a detailed description of your testing procedure. You should describe how you tested your class and what bugs you found and fixed by so doing.</li><br>
+  <li> Discussion: a reflective discussion of your experience writing this assignment. This could be in the form of a journal.</li>
+</ul>
+
+<h2 style="color:#FFFFFF;background-color:#045FB4">
+Video Overview
+</h2>
+
+<p>
+A video overview of this project is available <a href="https://youtu.be/U9TsMisnKL8" target="_blank">here</a>.
+</p>
+
+<h2 style="color:#FFFFFF;background-color:#045FB4">
+Grading
+</h2>
+
+<p>
+Points will be awarded according to the following breakdown:
+</p>
+
+<table width="70%" border="1" cellpadding="2" cellspacing="2" style="border-color: #000000; border-style: solid; background-color: #ffffff;">
+  <tbody><tr valign="top">
+    <td><b>Tasks</b></td>
+    <td width="61"><b>Points</b></td>
+  </tr>
+  <tr valign="top">
+    <td>Documentation - README (with analysis), Javadocs, comments</td>
+    <td width="61">20</td>
+  </tr>
+  <tr valign="top">
+    <td>Functionality - correct results, error handling, etc.</td>
+    <td width="61">60</td>
+  </tr>
+  <tr valign="top">
+    <td>Quality - code formatting, naming conventions, encapsulation, etc.</td>
+    <td width="61">20</td>
+  </tr>
+  <tr valign="top">
+    <td>Extra Credit - fully functioning GUI</td>
+    <td width="61">up to 10</td>
+  </tr>
+</tbody></table>
+
+<h2 style="color:#FFFFFF;background-color:#045FB4">
+Required Files
+</h2>
+
+<p>
+Please submit the following files:
+</p>
+
+<ul>
+  <li>README.txt</li>
+  <li>CircuitTracer.java (updated)</li>
+  <li>CircuitBoard.java (updated)</li>
+  <li><i>Any other files required to compile CircuitTracer</i></li>
+</ul>
+<b>Do not</b> submit any of the sample input files or the given <tt><big>CircuitTracerTester</big></tt> test class.
+
+<h2 style="color:#FFFFFF;background-color:#045FB4">
+Submission
+</h2>
+
+<p>
+Submit all of the required files. Do not include any unnecessary files. Do NOT submit anything zipped (your submission should just be a README and individual .java files).<br>
+Submit everything to the Circuit Tracer Project assignment in Microsoft Teams.
+</p>
+
+<br>
+<br>
+
+</div>
+
+</body></html>

@@ -1,0 +1,168 @@
+body {
+    background-color: #ecf0f1;
+}
+
+.masthead.segment {
+    min-height: 700px;
+    padding: 1em 0;
+}
+
+    .masthead.segment.small {
+        min-height: 350px;
+    }
+
+.masthead .logo.item img {
+    margin-right: 1em;
+}
+
+.masthead .ui.menu .ui.button {
+    margin-left: 0.5em;
+}
+
+.masthead h1.ui.header {
+    margin-top: 2.2em;
+    margin-bottom: 0;
+    font-size: 3em;
+    font-weight: normal;
+}
+
+.masthead.small h1.ui.header {
+    margin-top: 1.5em;
+}
+
+.masthead h2 {
+    font-size: 1.7em;
+    font-weight: normal;
+}
+
+.ui.vertical.stripe {
+    padding: 8em 0;
+}
+
+    .ui.vertical.stripe h3 {
+        font-size: 2em;
+    }
+
+    .ui.vertical.stripe .button + h3,
+    .ui.vertical.stripe p + h3 {
+        margin-top: 3em;
+    }
+
+    .ui.vertical.stripe .floated.image {
+        clear: both;
+    }
+
+    .ui.vertical.stripe p {
+        font-size: 1.33em;
+    }
+
+    .ui.vertical.stripe .horizontal.divider {
+        margin: 3em 0;
+    }
+
+.footer.segment {
+    padding: 5em 0;
+}
+
+.secondary.pointing.menu .toc.item {
+    display: none;
+}
+
+.ui.hyperlink {
+    position: relative;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+    .ui.hyperlink:before {
+        margin-bottom: -2px;
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        bottom: 0;
+        left: 0;
+        visibility: hidden;
+        background-color: #1e70bf;
+        transform: scaleX(0);
+        transition: all 0.3s ease-in-out 0s;
+    }
+
+    .ui.hyperlink:hover:before {
+        visibility: visible;
+        transform: scaleX(1);
+    }
+
+    .ui.hyperlink.large {
+        font-size: 1.2em;
+    }
+
+.inline {
+    display: inline-block;
+}
+
+    .inline.image {
+        margin-left: 3px;
+        margin-bottom: -5px;
+    }
+
+p.compact {
+    margin-bottom: 0;
+}
+
+.compact p {
+    margin-bottom: 5px;
+}
+
+.nudged {
+    margin-left: 25px;
+}
+
+    .nudged.double {
+        margin-left: 50px;
+    }
+
+.aligning {
+    width: 200px;
+    display: inline-block;
+    cursor: default;
+}
+
+.centered {
+    text-align: center !important;
+}
+
+@media only screen and (max-width: 1000px) {
+    table {
+        font-size: 10px !important;
+    }
+}
+
+.container.separated {
+    margin-top: 4rem !important;
+}
+
+.container.separated.very {
+    margin-top: 6rem !important;
+}
+
+.header.horizontal.divider {
+    margin: 1rem 0 !important;
+}
+
+.red {
+    color: red;
+}
+
+#calculatePinNotification {
+    float: left;
+    margin-top: 6px;
+}
+
+#calculatePinModal {
+    display: none;
+}
+
+#calculatePinButton {
+    margin-top: 1em;
+}
